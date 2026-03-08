@@ -1,29 +1,44 @@
 # Nombre del flujo de trabajo
 name: CI Workflow
 
-# 1. Eventos que activan el flujo (Triggers)
+# PASO 1: 1. Eventos que activan el flujo (Triggers)
 on:
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-
-# 2. Definición de los trabajos (Jobs)
+    
+# PASO 1: 2. Definición de los trabajos (Jobs)
 jobs:
   build:
-    # 3. El Ejecutor (Runner): Una máquina virtual con Ubuntu
+    # PASO 1: 3. El Ejecutor (Runner): Una máquina virtual con Ubuntu
     runs-on: ubuntu-latest
-
-    # 4. El Contenedor: Ejecutar los pasos dentro de una imagen de Python
+    
+    # PASO 1: 4. El Contenedor: Ejecutar los pasos dentro de una imagen de Python
     container:
       image: python:3.9-slim
 
-    # Pasos iniciales (A completarse en la Parte 2)
+    # PASO 2: Añadimos el servicio de Redis
+    services:
+      redis:
+        image: redis:6-alpine
+        ports:
+          - 6379:6379
+
     steps:
+      # Descarga el código del repositorio
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install basic tools
+      # Instala las librerías necesarias
+      - name: Install dependencies
         run: |
-          python --version
-          pip install --upgrade pip
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # PASO 2: Ejecutar las pruebas unitarias
+      # Usamos una variable de entorno para decirle a Python dónde está Redis
+      - name: Run unit tests
+        env:
+          DATABASE_URI: redis://redis:6379
+        run: nosetests
