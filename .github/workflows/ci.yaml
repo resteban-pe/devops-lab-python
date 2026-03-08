@@ -4,9 +4,9 @@ name: CI Workflow
 # 1. Eventos que activan el flujo (Triggers)
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "main" ]
 
 # 2. Definición de los trabajos (Jobs)
 jobs:
