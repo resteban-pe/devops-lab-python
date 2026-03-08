@@ -1,2 +1,2 @@
-# devops-lab-python
-Laboratorio de CI/CD con GitHub Actions
+# Proyecto Final CI/CD
+Sistema de Gestión Python.
